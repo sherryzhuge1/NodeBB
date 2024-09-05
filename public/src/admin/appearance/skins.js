@@ -7,31 +7,16 @@ define('admin/appearance/skins', [
 	const Skins = {};
 
 	Skins.init = function () {
-		// Populate skins from Bootswatch API
-		$.ajax({
-			method: 'get',
-			url: 'https://bootswatch.com/api/5.json',
-		}).done((bsData) => {
-			hooks.on('action:settings.sorted-list.loaded', (data) => {
-				if (data.hash === 'custom-skins') {
-					// slugify all custom-skin ids after load
-					$('.custom-skin-settings [data-type="list"] [data-theme]').each((i, el) => {
-						$(el).attr('data-theme', slugify($(el).attr('data-theme')));
-					});
-					highlightSelectedTheme(app.config.bootswatchSkin);
-				}
-			});
-			settings.load('custom-skins', $('.custom-skin-settings'));
-			Skins.render(bsData);
-		});
+		// fetch skins from bootswatch API
+		fetchBootswatchAPI();
 
+		// event listeners
 		$('#save-custom-skins').on('click', function () {
 			settings.save('custom-skins', $('.custom-skin-settings'), function () {
 				alerts.success('[[admin/appearance/skins:save-custom-skins-success]]');
 			});
 			return false;
 		});
-
 
 		$('#skins').on('click', function (e) {
 			let target = $(e.target);
@@ -70,6 +55,33 @@ define('admin/appearance/skins', [
 		});
 	};
 
+	// Populate skins from Bootswatch API
+	function fetchBootswatchAPI() {
+		$.ajax({
+			method: 'get',
+			url: 'https://bootswatch.com/api/5.json',
+		}).done(processBootswatchData);
+	}
+	// process data once loaded
+	function processBootswatchData(bsData) {
+		hooks.on('action:settings.sorted-list.loaded', handleCustomSettings);
+		settings.load('custom-skins', $('.custom-skin-settings'));
+		Skins.render(bsData);
+	}
+
+	function handleCustomSettings(data) {
+		if (data.hash === 'custom-skins') {
+			slugifyCustomSkin();
+			highlightSelectedTheme(app.config.bootswatchSkin);
+		}
+	}
+
+	// slugify all custom-skin ids after load
+	function slugifyCustomSkin() {
+		$('.custom-skin-settings [data-type="list"] [data-theme]').each((i, el) => {
+			$(el).attr('data-theme', slugify($(el).attr('data-theme')));
+		});
+	}
 	Skins.render = function (bootswatch) {
 		const themeContainer = $('#bootstrap_themes');
 
