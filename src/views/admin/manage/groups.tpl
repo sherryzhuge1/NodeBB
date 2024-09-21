@@ -6,7 +6,7 @@
 		</div>
 		<div class="d-flex gap-1">
 			<div class="input-group">
-				<input type="text" class="form-control form-control-sm" placeholder="[[admin/manage/groups:search-placeholder]]" id="group-search">
+				<input type="text" class="form-control form-control-sm" placeholder="SEARCH TEST" id="group-search">
 				<span class="input-group-text search-button"><i class="fa fa-search"></i></span>
 			</div>
 
