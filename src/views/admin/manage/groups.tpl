@@ -11,6 +11,7 @@
 			</div>
 
 			<button id="create" class="btn btn-primary btn-sm btn btn-primary btn-sm fw-semibold ff-secondary text-center text-nowrap">[[admin/manage/groups:add-group]]</button>
+            <button id="new-button" class="btn btn-secondary btn-sm btn fw-semibold ff-secondary text-center text-nowrap">New Button</button>
 		</div>
 	</div>
 
